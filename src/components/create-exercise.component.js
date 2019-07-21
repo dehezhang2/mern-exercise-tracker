@@ -1,7 +1,14 @@
 import React, { Component } from "react";
-import { MDBContainer,MDBInput } from "mdbreact"
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import TextField from 'material-ui/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
+// import { makeStyles } from '@material-ui/core/styles';
+// import MenuItem from '@material-ui/core/MenuItem';
 export default class CreateExercise extends Component {
+
     constructor(props) {
         super(props);
         
@@ -9,7 +16,7 @@ export default class CreateExercise extends Component {
         this.state = {
             username : '',
             description : '',
-            duration: 0,
+            duration: null,
             date: new Date(),
             users: []
         };
@@ -26,7 +33,7 @@ export default class CreateExercise extends Component {
     // connect with datebase to retrieve user information for selection
     componentDidMount() {
         this.setState({
-            users: ['test user'],
+            users: ['test user1','test user2','test user3'],
             username: 'test user'
         });
     }
@@ -37,7 +44,6 @@ export default class CreateExercise extends Component {
             username: e.target.value
         });
     }
-
     onChangeDescription(e) {
         this.setState({
             description: e.target.value
@@ -73,18 +79,23 @@ export default class CreateExercise extends Component {
 
     render() {
         return (
+            
             <div>
                 <h3>Create New Exercise Log</h3>
-                <MDBContainer>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
-
-                        <label>Username: </label>
-                        <select ref="userInput"
+                    <FormControl required fullWidth={true}>
+                        <InputLabel htmlFor="select-user">Username</InputLabel>
+                        <Select ref="userInput"           
                             required
                             className="form-control"
                             value={this.state.username}
-                            onChange={this.onChangeUsername}>
+                            onChange={this.onChangeUsername}
+                            inputProps={{
+                                name: 'user',
+                                id: 'select-user'
+                            }}
+                            >
                             {
                                 this.state.users.map(function(user){
                                     return <option 
@@ -93,24 +104,48 @@ export default class CreateExercise extends Component {
                                         </option>;
                                 })
                             }
-                        </select>
 
+                        </Select>
+                        </FormControl>
                     </div>
-
                     <div className="form-group">
-                        <label>Description: </label>
-                        <input type="text"
+                        <TextField
+                            type="text"
                             required
                             className="form-control"
                             value={this.state.description}
                             onChange={this.onChangeDescription}
-                            />
+                            label="Description"
+                        />
                     </div>
-
-                    <MDBInput label="Material input" />
+                    <div className="form-group">
+                        <TextField
+                            type="text"
+                            className="form-control"
+                            value={this.state.duration}
+                            onChange={this.duration}
+                            label="Duration (in minutes)"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <TextField
+                            type="date"
+                            selected={this.state.date}
+                            onChange={this.onChangeDate}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Button
+                            type="submit"
+                            value="Create Exercise Log"
+                            className="btn btn-primary"
+                            label="Create Exercise"
+                            />
+                    </div>                    
                 </form>
-                </MDBContainer>
+                
             </div>
+            
         );
     }
 }
